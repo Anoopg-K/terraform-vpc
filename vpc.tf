@@ -22,3 +22,14 @@ resource "aws_vpc" "vpc" {
     
 }
 
+
+# ===============================================================================
+# Internet Gate Way For Vpc
+# ===============================================================================
+resource "aws_internet_gateway" "igw" {
+    
+  vpc_id = aws_vpc.vpc.id
+  tags = {
+    Name = "${var.project}-igw"
+  }
+}
