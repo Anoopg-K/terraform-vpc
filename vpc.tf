@@ -132,7 +132,7 @@ resource "aws_subnet" "private3" {
 
 
 # ===============================================================================
-# Creating Elastic Ip For Nat Gateway.
+# Creating Elastic Ip For NAT Gateway.
 # ===============================================================================
 
 resource "aws_eip" "eip" {
@@ -144,7 +144,7 @@ resource "aws_eip" "eip" {
 
 
 # ===============================================================================
-# Creating Nat Gateway.
+# Creating NAT Gateway.
 # ===============================================================================
 
 resource "aws_nat_gateway" "nat" {
@@ -156,3 +156,86 @@ resource "aws_nat_gateway" "nat" {
     Name = "${var.project}-nat"
   }
 }
+
+# ===============================================================================
+# Public Route Table
+# ===============================================================================
+
+resource "aws_route_table" "public" {
+    
+  vpc_id = aws_vpc.vpc.id
+
+  route {
+    cidr_block = "0.0.0.0/0"
+    gateway_id = aws_internet_gateway.igw.id
+  }
+
+  tags = {
+    Name = "${var.project}-public"
+  }
+}
+
+
+# ===============================================================================
+# Private Route Table
+# ===============================================================================
+
+resource "aws_route_table" "private" {
+    
+  vpc_id = aws_vpc.vpc.id
+
+  route {
+    cidr_block = "0.0.0.0/0"
+    nat_gateway_id = aws_nat_gateway.nat.id
+  }
+
+  tags = {
+    Name = "${var.project}-private"
+  }
+}
+
+
+# ===============================================================================
+# Public Route Table Association
+# ===============================================================================
+
+resource "aws_route_table_association" "public1" {        
+  subnet_id      = aws_subnet.public1.id
+  route_table_id = aws_route_table.public.id
+}
+
+resource "aws_route_table_association" "public2" {      
+  subnet_id      = aws_subnet.public2.id
+  route_table_id = aws_route_table.public.id
+}
+
+
+resource "aws_route_table_association" "public3" {       
+  subnet_id      = aws_subnet.public3.id
+  route_table_id = aws_route_table.public.id
+}
+
+
+
+
+# ===============================================================================
+# Private Route Table Association
+# ===============================================================================
+
+resource "aws_route_table_association" "private1" {        
+  subnet_id      = aws_subnet.private1.id
+  route_table_id = aws_route_table.private.id
+}
+
+resource "aws_route_table_association" "private2" {      
+  subnet_id      = aws_subnet.private2.id
+  route_table_id = aws_route_table.private.id
+}
+
+
+resource "aws_route_table_association" "private3" {       
+  subnet_id      = aws_subnet.private3.id
+  route_table_id = aws_route_table.private.id
+}
+
+
