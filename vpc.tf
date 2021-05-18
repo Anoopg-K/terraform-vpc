@@ -128,3 +128,31 @@ resource "aws_subnet" "private3" {
     Name = "${var.project}-private3"
   }
 }
+
+
+
+# ===============================================================================
+# Creating Elastic Ip For Nat Gateway.
+# ===============================================================================
+
+resource "aws_eip" "eip" {
+  vpc      = true
+  tags     = {
+    Name = "${var.project}-eip"
+  }
+}
+
+
+# ===============================================================================
+# Creating Nat Gateway.
+# ===============================================================================
+
+resource "aws_nat_gateway" "nat" {
+    
+  allocation_id = aws_eip.eip.id
+  subnet_id     = aws_subnet.public1.id
+
+  tags = {
+    Name = "${var.project}-nat"
+  }
+}
