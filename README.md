@@ -10,6 +10,7 @@ If you do not have Terraform installed on your system [Click here](https://www.t
 ## Declaring variables
 ```sh
 $vim variable.tf
+
 variable "region" {}
 variable "access_key" {}
 variable "secret_key" {}
@@ -19,6 +20,7 @@ variable "project" {}
 ## Provider file
 ```sh
 $vim provider.tf
+
 provider "aws" {
   region     = var.region
   access_key = var.access_key
@@ -29,6 +31,7 @@ provider "aws" {
 ## Tfvars file
 ```sh
 $vim terraform.tfvars
+
 region = "enter your region"
 access_key = "enter your access key"
 secret_key = "enter your secret key"
@@ -39,6 +42,7 @@ vpc_cidr = "enter the cidr block"
 ## Main .tf file
 ```sh
 $vim vpc.tf
+
 # ===================================================================
 # Gathering All Subent Name
 # ===================================================================
